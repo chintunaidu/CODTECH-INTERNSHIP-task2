@@ -1,0 +1,83 @@
+class GradeManager:
+    def __init__(self):
+        self.grades = {}
+
+    def add_grade(self, subject, grade):
+        """Add a grade for a specific subject or assignment."""
+        if subject in self.grades:
+            self.grades[subject].append(grade)
+        else:
+            self.grades[subject] = [grade]
+        print(f"Grade {grade} added for {subject}.")
+
+    def calculate_average(self):
+        """Calculate the average grade across all subjects or assignments."""
+        total_grades = [grade for grades in self.grades.values() for grade in grades]
+        if total_grades:
+            return sum(total_grades) / len(total_grades)
+        return 0.0
+
+    def calculate_gpa(self):
+        """Calculate GPA based on average grade (0-100 scale)."""
+        average = self.calculate_average()
+        return (average / 100) * 4.0  # Convert percentage to GPA on a 4.0 scale
+
+    def get_letter_grade(self):
+        """Determine the letter grade based on average grade."""
+        average = self.calculate_average()
+        if average >= 90:
+            return 'A'
+        elif average >= 80:
+            return 'B'
+        elif average >= 70:
+            return 'C'
+        elif average >= 60:
+            return 'D'
+        else:
+            return 'F'
+
+    def display_info(self):
+        """Display the overall grade, GPA, and letter grade."""
+        average = self.calculate_average()
+        gpa = self.calculate_gpa()
+        letter_grade = self.get_letter_grade()
+
+        print("\n--- Student Grade Summary ---")
+        print(f"Average Grade: {average:.2f}")
+        print(f"Letter Grade: {letter_grade}")
+        print(f"GPA: {gpa:.2f}")
+        print("-----------------------------")
+
+def main():
+    manager = GradeManager()
+
+    while True:
+        print("\nOptions:")
+        print("1. Add Grade")
+        print("2. Display Overall Grade")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            subject = input("Enter subject or assignment name: ")
+            try:
+                grade = float(input("Enter grade (0-100): "))
+                if 0 <= grade <= 100:
+                    manager.add_grade(subject, grade)
+                else:
+                    print("Error: Grade must be between 0 and 100.")
+            except ValueError:
+                print("Error: Invalid grade entered. Please enter a numeric value.")
+        
+        elif choice == '2':
+            manager.display_info()
+
+        elif choice == '3':
+            print("Exiting...")
+            break
+        
+        else:
+            print("Invalid choice. Please select again.")
+
+if __name__ == "__main__":
+    main()
